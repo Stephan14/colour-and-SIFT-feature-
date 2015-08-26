@@ -1,3 +1,2 @@
-# colour-and-SIFT-feature-
-the way to get colour and SIFT feature of a picture
-detaile
+基于RGB颜色空间的颜色特征和SIFT特征
+========================================================
