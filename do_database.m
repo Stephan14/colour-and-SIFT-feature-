@@ -8,7 +8,7 @@ function [ output_args ] = do_database(file,rgbhist,frames,descr )
 %descr --- the descriptor of a feature
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-conn = database('project','cdb_outerroot','(19951227)','com.mysql.jdbc.Driver','jdbc:mysql://182.254.128.241:7707/project');
+conn = database('project','cdb_outerroot','','com.mysql.jdbc.Driver','jdbc:mysql://182.254.128.241:7707/project');
 
 res = exec(conn,['select id from pictures where url=' file]);
 res = fetch(res);
