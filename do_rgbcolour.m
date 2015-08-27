@@ -1,49 +1,46 @@
 function [ hist ] = do_rgbcolour( file )
-%DO_RGBCOLOUR ´Ë´¦ÏÔÊ¾ÓĞ¹Ø´Ëº¯ÊıµÄÕªÒª
-%   ´Ë´¦ÏÔÊ¾ÏêÏ¸ËµÃ÷
+%DO_RGBCOLOUR is used to get colour feature of a picture
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%Input:
+%file --- the absolute path of a picture
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%Output:
+%hist --- a vector to show colour feature
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 picture = imread(file);  
 picR = picture(:,:,1);  
 picG = picture(:,:,2);  
 picB = picture(:,:,3);  
   
   
-figure,imshow(picR)                   
-title('R·ÖÁ¿µÄÍ¼Ïñ')  
+figure,imshow(picture)                   
+title('åŸå§‹å›¾åƒ')
   
   
-% ¶ş£¬»æÖÆÖ±·½Í¼  
-[m,n]=size(picR);                            %²âÁ¿Í¼Ïñ³ß´ç²ÎÊı  
-rhist=zeros(1,256);                          %Ô¤´´½¨´æ·Å»Ò¶È³öÏÖ¸ÅÂÊµÄÏòÁ¿ 
+% âˆ‚Ë›Â£Â¨ÂªÃŠÃ·âˆ†Ã·Â±âˆ‘Î©Ã•Âº  
+[m,n]=size(picR);                            %â‰¤â€šÂ¡Ã¸Ã•ÂºÅ“Ã’â‰¥ï¬‚Â¥Ãâ‰¤Å’Â Ë  
+rhist=zeros(1,256);                          %â€˜Â§Â¥Â¥Î©Â®Â¥ÃŠâˆ‘â‰ˆÂªâ€œâˆ‚Â»â‰¥Ë†Å“Ã·âˆâ‰ˆÂ¬Â ÂµÆ’Å“ÃšÂ¡Ã¸ 
 bhist=zeros(1,256); 
 ghist=zeros(1,256); 
 
 for k=0:255      
-    rhist(k+1)=length(find(picR==k))/(m*n);     %¼ÆËãÃ¿¼¶»Ò¶È³öÏÖµÄ¸ÅÂÊ£¬½«Æä´æÈërhistÖĞÏàÓ¦Î»ÖÃ
+    rhist(k+1)=length(find(picR==k))/(m*n);     %Âºâˆ†Ã€â€âˆšÃ¸Âºâˆ‚Âªâ€œâˆ‚Â»â‰¥Ë†Å“Ã·ÂµÆ’âˆâ‰ˆÂ¬Â Â£Â¨Î©Â´âˆ†â€°Â¥ÃŠÂ»ÃrhistÃ·â€“Å“â€¡â€Â¶Å’ÂªÃ·âˆš
     ghist(k+1)=length(find(picG==k))/(m*n);
     bhist(k+1)=length(find(picB==k))/(m*n);   
 end  
-figure,bar(0:255,rhist,'r')                   %»æÖÆÖ±·½Í¼   
-title('RÏñÖ±·½Í¼')  
-xlabel('»Ò¶ÈÖµ')  
-ylabel('³öÏÖ¸ÅÂÊ')  
-%%  
-  
- 
-figure,bar(0:255,ghist,'g')                  
-title('RÏñÖ±·½Í¼')  
-xlabel('»Ò¶ÈÖµ')  
-ylabel('³öÏÖ¸ÅÂÊ')  
-  
-  
-%%  
-
-
-
-figure,bar(0:255,bhist,'b')                   
-title('RÏñÖ±·½Í¼')  
-xlabel('»Ò¶ÈÖµ')  
-ylabel('³öÏÖ¸ÅÂÊ')  
-hist = [reshape(rhist',1,256),reshape(ghist',1,256),reshape(bhist',1,256)]; %½«Ö±·½Í¼Æ´½Ó³É 256*3 µÄÏòÁ¿¡£  
+figure,bar(0:255,rhist,'r')                   %ç»˜åˆ¶ç›´æ–¹å›¾
+title('Råƒç›´æ–¹å›¾')
+xlabel('ç°åº¦å€¼')
+ylabel('å‡ºç°æ¦‚ç‡')
+figure,bar(0:255,ghist,'g')
+title('Gåƒç›´æ–¹å›¾')
+xlabel('ç°åº¦å€¼')
+ylabel('å‡ºç°æ¦‚ç‡')
+figure,bar(0:255,bhist,'b')
+title('Båƒç›´æ–¹å›¾')
+xlabel('ç°åº¦å€¼')
+ylabel('å‡ºç°æ¦‚ç‡')
+hist = [reshape(rhist',1,256),reshape(ghist',1,256),reshape(bhist',1,256)]; %Î©Â´Ã·Â±âˆ‘Î©Ã•Âºâˆ†Â¥Î©â€â‰¥â€¦ 256*3 ÂµÆ’Å“ÃšÂ¡Ã¸Â°Â£  
 
 end
 

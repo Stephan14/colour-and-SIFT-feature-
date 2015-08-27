@@ -1,15 +1,22 @@
 function [ output_args ] = do_database(file,rgbhist,frames,descr )
-%DO_DATABASE 此处显示有关此函数的摘要
-%   此处显示详细说明
+%DO_DATABASE is used to insert colour feature and SIFT feature into datanase
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%Input:
+%file --- the absolute path of a picture on localhost
+%rgbhist --- the 768 dimensions' colour feature
+%frames --- the coordinate,scale and orient of a feature
+%descr --- the descriptor of a feature
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
 conn = database('project','cdb_outerroot','(19951227)','com.mysql.jdbc.Driver','jdbc:mysql://182.254.128.241:7707/project');
 
 res = exec(conn,['select id from pictures where url=' file]);
 res = fetch(res);
-picture_id = res.Data{1}
+picture_id = res.Data{1};
 
 
 set(conn,'AutoCommit','off');
-%插入颜色特征
+%insert colour feature
 fastinsert(conn,'color_desc',{'picid',...
     '_1desc1','_1desc2','_1desc3','_1desc4','_1desc5','_1desc6','_1desc7','_1desc8',...
     '_1desc9','_1desc10','_1desc11','_1desc12','_1desc13','_1desc14','_1desc15','_1desc16',...
@@ -205,8 +212,8 @@ fastinsert(conn,'color_desc',{'picid',...
    rgbhist(745) rgbhist(746) rgbhist(747) rgbhist(748) rgbhist(749) rgbhist(750) rgbhist(751) rgbhist(752)...
    rgbhist(753) rgbhist(754) rgbhist(755) rgbhist(756) rgbhist(757) rgbhist(758) rgbhist(759) rgbhist(760)...
    rgbhist(761) rgbhist(762) rgbhist(763) rgbhist(764) rgbhist(765) rgbhist(766) rgbhist(767) rgbhist(768)]);
-
-%插入SIFT特征描述子
+commit(conn);
+%insert SIFT feature
 remainder = mod(size(frames,2),2);
 for index = 1:2:(size(frames,2)-remainder)
 fastinsert(conn,'sift_desc', {
@@ -261,6 +268,7 @@ fastinsert(conn,'sift_desc', {
                                                                                       descr(105,index+1) descr(106,index+1) descr(107,index+1) descr(108,index+1) descr(109,index+1) descr(110,index+1) descr(111,index+1) descr(112,index+1)...
                                                                                       descr(113,index+1) descr(114,index+1) descr(115,index+1) descr(116,index+1) descr(117,index+1) descr(118,index+1) descr(119,index+1) descr(120,index+1)...
                                                                                       descr(121,index+1) descr(122,index+1) descr(123,index+1) descr(124,index+1) descr(125,index+1) descr(126,index+1) descr(127,index+1) descr(128,index+1)]);
+commit(conn);
 end
 if remainder == 1
 index = size(frames,2);
@@ -300,8 +308,8 @@ fastinsert(conn,'sift_desc', {
                                                                                       descr(113,index) descr(114,index) descr(115,index) descr(116,index) descr(117,index) descr(118,index) descr(119,index) descr(120,index)...
                                                                                       descr(121,index) descr(122,index) descr(123,index) descr(124,index) descr(125,index) descr(126,index) descr(127,index) descr(128,index)
                                                                                       ]);
-end
 commit(conn);
+end
 close(conn);
 end
 

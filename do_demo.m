@@ -18,7 +18,7 @@ img1_file = 'image1.jpg'
 
 
 I1_rgb = imread([img1_dir img1_file]) ; 
-I1_rgb =imresize(I1_rgb, [240 320]);%对图像做缩放处理
+I1_rgb =imresize(I1_rgb, [240 320]);%鈭傗�樏暵号撁掆棅藛脌谋鈭戔増楼露驴脤
 
 rgbhist = do_rgbcolour([img1_dir img1_file]);
 
@@ -27,12 +27,12 @@ rgbhist = do_rgbcolour([img1_dir img1_file]);
 
 
 
-figure(1) ; clf ; plotss(dogss) ; colormap gray ;  %显示差分
+figure(5) ; clf ; plotss(dogss) ; colormap gray ;  %鏄剧ず宸垎
 drawnow ;
 
-figure(2) ; clf ;
+figure(6) ; clf ;
 imshow(I1_rgb) ; axis image ;
 
 hold on ;
-h=plotsiftframe( frames ) ; 
+h=plotsiftframe( frames ) ;
 set(h,'LineWidth',1,'Color','g') ;
