@@ -5,10 +5,9 @@ function L = do_gaussian(I,sigmaN,O,S,omin,smin,smax,sigma0)
  % description: gaussian scale space of image I
  %%
 
-if(nargin<7)        %nargin是用来判断输入变量个数的函数
+if(nargin<7)        %nargin is used to determine the number of input variables of the function
    sigma0=1.6*k;
-end              %do_sift函数中已经定义sigma0,且输入变量总量>7故此步不执行。
-
+end              do_sift function has been defined sigma0, and enter the total amount of variable> 7 therefore does not perform step
 if omin<0
    for o=1:-omin
 	I=doubleSize(I);
@@ -17,17 +16,17 @@ elseif omin>0
    for o=1:-omin
 	I=halveSize(I);
    end
-end              %do_sift中已经定义omin=0，故此步不执行
+end              % do_sift already defined omin = 0, therefore step is not performed
 
-[M,N] = size(I);                      %图像的尺寸
-%用来计算sigma0值，方便
+[M,N] = size(I);
+% Used to calculate sigma0 value, convenience
 k = 2^(1/S);                          %scale space multiplicative step k
-sigma0=1.6*k;                         % Lowe 定义的
-dsigma0 = sigma0*sqrt(1-1/k^2);       %真正平滑用到的高斯尺度基准
+sigma0=1.6*k;
+dsigma0 = sigma0*sqrt(1-1/k^2);
 sigmaN=0.5;                           %nominal smoothing of the image
 so=-smin+1;                           %index offset
 
-%scale space structure 构建尺度空间
+%scale space structure
 L.O = O;
 L.S = S;
 L.sigma0 = sigma0;
@@ -37,13 +36,13 @@ L.smax = smax;
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%First Octave  第一组
+%First Octave
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-% 初始化第一组
+%The first set of initialization
 L.octave{1} = zeros(M,N,smax-smin+1); 
 
-% 初始化第一层
+%The first set of initialization
 sig=sqrt( (sigma0*k^smin)^2 - (sigmaN/2^omin)^2 );
 %b=smooth2(I,sig) ;
 %[N1,M1]=size(b)
@@ -53,35 +52,34 @@ sig=sqrt( (sigma0*k^smin)^2 - (sigmaN/2^omin)^2 );
 %c(1:4,1:4)
 L.octave{1}(:,:,1) = smooth(I,sig);
 
-%other sub-levels 其它层
+%other sub-levels
 for s=smin+1:smax
     dsigma = k^s * dsigma0;
     L.octave{1}(:,:,s+so) = smooth( squeeze(L.octave{1}(:,:,s-1+so)) ,dsigma);
 end    
-%%只是记录下了sigma0和用到的层数，并不为每层确定具体的尺度值，具体尺度值可推导出来
+%% Sigma0 and just recorded the number of layers used, does not determine the specific value of each dimension, specific scale value can be derived
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%接下来的组
+% The next group
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-%转化所有组
-for o=2:O     %接下来从第2组开始
+% Conversion all groups
+for o=2:O     % Next start from the second group
     
     sbest = min(smin+S,smax);
-    TMP = halvesize( squeeze(L.octave{o-1}(:,:,sbest+so)) );%以第四层降采样
+    TMP = halvesize( squeeze(L.octave{o-1}(:,:,sbest+so)) );% In the fourth layer downsampling
     sigma_next = sigma0*k^smin;
     sigma_prev = sigma0*k^(sbest-S);
     
     if (sigma_next>sigma_prev)
        sig=sqrt(sigma_next^2-sigma_prev^2);
        TMP= smooth( TMP,sig);
-    end       %什么情况下会出现这种状态呢？       
+    end
     
     [M,N] = size(TMP);
-    L.octave{o} = zeros(M,N,smax-smin+1); %初始化下一组
-    L.octave{o}(:,:,1) = TMP;             %降采样得到图像作为该组第一层
-    
-    %other sub-levels 其它层
+    L.octave{o} = zeros(M,N,smax-smin+1); % Initialization next set
+    L.octave{o}(:,:,1) = TMP;             % Down sampled image as the set of the first layer
+    %other sub-levels 
     for s=smin+1:smax
         dsigma = k^s * dsigma0;
         L.octave{o}(:,:,s+so) = smooth( squeeze(L.octave{o}(:,:,s-1+so)) ,dsigma);
